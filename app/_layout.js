@@ -1,5 +1,6 @@
-import { Tabs } from "expo-router";
+import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from "expo-router";
 
 export default function RootLayout() {
   return <Tabs screenOptions={{ tabBarActiveTintColor: "#2b70e4", tabBarStyle: {backgroundColor: "rgb(2, 20, 48)"}, tabBarInactiveTintColor: "white" }}>
@@ -19,6 +20,9 @@ export default function RootLayout() {
       }}/>
     <Tabs.Screen name="user/account" options={{
       headerShown: true,
+      headerRight: () => (
+        <Feather name="settings" size={20} color="black" style={{ marginRight: 15 }} />
+      ),
       title: "Account",
       tabBarIcon: ({ color, size }) => (
         <FontAwesome name="user" size={size} color={color} />
