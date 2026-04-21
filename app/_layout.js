@@ -20,8 +20,9 @@ export default function RootLayout() {
       }}/>
     <Tabs.Screen name="user/account" options={{
       headerShown: true,
+      headerTitle: "",
       headerRight: () => (
-        <Feather name="settings" size={20} color="black" style={{ marginRight: 15 }} />
+        <Feather name="settings" size={23} color="rgb(2, 20, 48)" style={{ marginRight: 18 }} />
       ),
       title: "Account",
       tabBarIcon: ({ color, size }) => (
