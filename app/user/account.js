@@ -8,7 +8,7 @@ export default function Account() {
         <SafeAreaProvider>
             <SafeAreaView>
                 <View style={styles.profileContainer}>
-                    <Text style={styles.profileText}>Manage Information</Text>
+                    <Text style={styles.profileText}>Manage Account</Text>
                     <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4, width: "100%"}}></View>
                 </View>
                 <View style={styles.userInfoContainer}>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     },
     profileText: {
         color: "rgb(2, 20, 48)",
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: "bold",
     },
     userInfoContainer: {

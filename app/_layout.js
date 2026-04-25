@@ -18,6 +18,10 @@ export default function RootLayout() {
         <FontAwesome name="book" size={size} color={color} />
       ),
       }}/>
+    <Tabs.Screen name="create/newSet" options={{ 
+      href: null ,
+      title: "New Set",
+      }} />
     <Tabs.Screen name="user/account" options={{
       headerShown: true,
       headerTitle: "",

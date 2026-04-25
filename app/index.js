@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const logo = require("../assets/images/FlashFuelLogo.png");
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: "rgb(2, 20, 48)",
+    fontWeight: "bold",
     fontSize: 35,
   },
   subHeaderContainer: {
