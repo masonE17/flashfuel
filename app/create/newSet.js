@@ -1,15 +1,31 @@
+import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link, Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function NewSet() {
-    const [subject, setSubject] = useState("");
-    const [description, setDescription] = useState("");
+    const [info, setInfo] = useState({ subject: "", description: "" })
     const [cards, setCards] = useState([{ question: "", answers: [{ text: "", correct: false }] }]);
     const cardCount = cards.length;
+
+    useEffect(() => {
+        const fetchSet = async () => {
+            let { data: sets, error: setError } = await supabase.from('sets').select('*').single();
+            let { data: cards, error: cardError } = await supabase.from('cards').select('*');
+            if (setError) {
+                console.log("Error fetching set info... " + setError);
+            }
+            if (cardError) {
+                console.log("Error fetching card data... " + cardError);
+            }
+            setInfo({ subject: sets.subject, description: sets.description });
+            setCards(cards);
+        };
+        fetchSet();
+    }, []);
 
     const addCard = () => {
         setCards([...cards, { question: "", answers: [{ text: "", correct: false }] }]);
@@ -66,17 +82,17 @@ export default function NewSet() {
                         <Text style={styles.setSubject}>Card Count: {cardCount}</Text>
                     </View>
                     <TextInput
-                        value={subject} 
-                        style={styles.inputContainer} 
+                        value={info.subject}
+                        style={styles.inputContainer}
                         placeholder="e.g. CS 1332"
-                        onChangeText={(userInput) => (setSubject(userInput))}
+                        onChangeText={(userInput) => setInfo({ ...info, subject: userInput })}
                     />
                     <Text style={styles.setDescription}>Description</Text>
-                    <TextInput 
-                        value={description}
-                        style={styles.inputContainer} 
+                    <TextInput
+                        value={info.description}
+                        style={styles.inputContainer}
                         placeholder="Description"
-                        onChangeText={(userInput) => setDescription(userInput)}
+                        onChangeText={(userInput) => setInfo({ ...info, description: userInput })}
                     />
                     <TouchableOpacity style={styles.createSetButton}>
                         <Feather name="plus" size={18} color="white" />
