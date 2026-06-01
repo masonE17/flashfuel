@@ -1,31 +1,15 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link, Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { Link, Stack, useRouter } from "expo-router";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function NewSet() {
-    const [info, setInfo] = useState({ subject: "", description: "" })
+    const [info, setInfo] = useState({ subject: "", description: "" });
     const [cards, setCards] = useState([{ question: "", answers: [{ text: "", correct: false }] }]);
     const cardCount = cards.length;
-
-    useEffect(() => {
-        const fetchSet = async () => {
-            let { data: sets, error: setError } = await supabase.from('sets').select('*').single();
-            let { data: cards, error: cardError } = await supabase.from('cards').select('*');
-            if (setError) {
-                console.log("Error fetching set info... " + setError);
-            }
-            if (cardError) {
-                console.log("Error fetching card data... " + cardError);
-            }
-            setInfo({ subject: sets.subject, description: sets.description });
-            setCards(cards);
-        };
-        fetchSet();
-    }, []);
 
     const addCard = () => {
         setCards([...cards, { question: "", answers: [{ text: "", correct: false }] }]);
@@ -65,6 +49,30 @@ export default function NewSet() {
         });
         setCards(newCards);
     }
+    const router = useRouter();
+    const createSet = async () => {
+        const { data: setData, error: setError } = await supabase.from('sets').insert([
+            {   
+                subject: info.subject, 
+                description: info.description, 
+            },
+        ]).select().single();
+        if (setError) {
+            console.log("Error creating set...", setError.message);
+            return;
+        }
+        const cardRows = cards.map(card => ({
+            set_id: setData.id,
+            question: card.question,
+            answers: card.answers,
+        }))
+        const { error: cardError } = await supabase.from('cards').insert(cardRows);
+        if (cardError) {
+            console.log("Error creating cards... " + cardError.message, cardError);
+            return;
+        }
+        router.push("/create/library");
+    }
     return (
         <SafeAreaProvider>
             <Stack.Screen options={{
@@ -94,7 +102,7 @@ export default function NewSet() {
                         placeholder="Description"
                         onChangeText={(userInput) => setInfo({ ...info, description: userInput })}
                     />
-                    <TouchableOpacity style={styles.createSetButton}>
+                    <TouchableOpacity style={styles.createSetButton} onPress={createSet}>
                         <Feather name="plus" size={18} color="white" />
                         <Text style={styles.createSetButtonText}>Create Set</Text>
                     </TouchableOpacity>

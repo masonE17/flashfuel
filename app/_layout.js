@@ -21,6 +21,7 @@ export default function RootLayout() {
     <Tabs.Screen name="create/newSet" options={{ 
       href: null ,
       title: "New Set",
+      tabBarStyle: { display: "none" },
       }} />
     <Tabs.Screen name="user/account" options={{
       headerShown: true,
