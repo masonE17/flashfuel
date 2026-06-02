@@ -34,5 +34,10 @@ export default function RootLayout() {
         <FontAwesome name="user" size={size} color={color} />
       ),
       }}/>
+      <Tabs.Screen name="auth/login" options={{
+        href: null,
+        title: "Login",
+        tabBarStyle: { display: "none" },
+      }} />
   </Tabs>
 }

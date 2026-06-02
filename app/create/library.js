@@ -7,10 +7,10 @@ import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Library() {
-    const [sets, setSets] = useState([])
+    const [sets, setSets] = useState([]);
     useFocusEffect(useCallback(() => {
         const fetchSets = async() => {
-            let { data, error } = await supabase.from('sets').select('*');
+            let { data, error } = await supabase.from('sets').select('*, cards(count)');
             if (error) {
                 console.log("Error fetching sets...", error.message);
                 return;
@@ -23,18 +23,24 @@ export default function Library() {
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerRight: () => (
-                    <Link href="/create/newSet" style={{ marginRight: 18 }}>
+                    <Link href={"/create/newSet"} style={{ marginRight: 18 }}>
                         <Feather name="plus" size={24} color="rgb(2, 20, 48)" />
                     </Link>
                 ),
+                headerLeft: () => (
+                    <Link href={"/auth/login"} style={{ marginLeft: 18 }}>
+                        <Feather name="user" size={24} color="rgb(2, 20, 48)" />
+                    </Link>
+                )
             }} />
             <SafeAreaView>
                 {sets.map((set) => (
                     <View key={set.id} style={styles.setContainer}>
                         <View style={styles.setInfo}>
                             <Text style={styles.setSubject}>{set.subject}</Text>
-                            <View style={{ borderBottomColor: "white", borderBottomWidth: 2, marginTop: 4}}></View>
+                            <View style={{ borderBottomColor: "white", borderBottomWidth: 2, marginTop: 4 }}></View>
                             <Text style={styles.setDescription}>{set.description}</Text>
+                            <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
                         </View>
                         <MaterialIcons name="quiz" size={50} color="rgb(2, 20, 48)" />
                     </View>
@@ -66,12 +72,12 @@ const styles = StyleSheet.create({
         color: "white",
     },
     setDescription: {
-        fontSize: 12,
+        fontSize: 14,
         color: "#a6a6a6",
         paddingTop: 6,
     },
     setCount: {
-        fontSize: 12,
+        fontSize: 14,
         color: "#a6a6a6",
     }
 })
