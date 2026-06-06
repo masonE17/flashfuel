@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -9,6 +9,9 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [username, setUsername] = useState('');
+  const router = useRouter();
   const login = require("../../assets/images/FlashFuelLogin.png");
 
   async function signInWithEmail() {
@@ -17,20 +20,35 @@ export default function Auth() {
       email: email,
       password: password,
     })
-
-    if (error) Alert.alert(error.message)
-    setLoading(false)
+    if (error) {
+      Alert.alert(error.message);
+    }
+    setLoading(false);
+    setEmail("");
+    setPassword("");
   }
 
   async function signUpWithEmail() {
     setLoading(true)
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     })
 
-    if (error) Alert.alert(error.message)
-    setLoading(false)
+    if (error) {
+      Alert.alert(error.message)
+    } else {
+      const { error: profileError } = await supabase.from('profile').insert({ user_id: data.user.id, username })
+      if (profileError) {
+        console.log(profileError)
+      } else {
+        router.push("/user/account")
+      }
+    }
+    setLoading(false);
+    setUsername("");
+    setEmail("");
+    setPassword("");
   }
 
   return (
@@ -45,8 +63,34 @@ export default function Auth() {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View>
                 <Image source={login} style={styles.image}/>
+                <View style={styles.tabContainer}>
+                  <TouchableOpacity
+                    onPress={() => setIsSignUp(false)}
+                    style={ isSignUp ? styles.inactiveTab : styles.activeTab }
+                  >
+                    <Text style={styles.tabText}>Login</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setIsSignUp(true)}
+                    style={ isSignUp ? styles.activeTab : styles.inactiveTab }
+                  >
+                    <Text style={styles.tabText}>Join</Text>
+                  </TouchableOpacity>
+                </View>
                 <View style={{ height: 5, width: "90%", backgroundColor: "rgb(2, 20, 48)", alignSelf: "center", borderRadius: 10 }}></View>
                 <View style={styles.loginContainer}>
+                  {isSignUp && (
+                    <View style={styles.userContainer}>
+                      <Text style={styles.userLabel}>Username</Text>
+                      <TextInput
+                      onChangeText={(text) => setUsername(text)}
+                      value={username}
+                      placeholder="Username"
+                      autoCapitalize="none"
+                      style={styles.userInput}
+                      />
+                    </View>
+                  )}
                   <View style={styles.userContainer}>
                       <Text style={styles.userLabel}>Email</Text>
                       <TextInput
@@ -68,7 +112,8 @@ export default function Auth() {
                       style={styles.userInput}
                       />
                   </View>
-                  <View>
+                  {!isSignUp && (
+                    <View>
                       <TouchableOpacity
                       onPress={() => signInWithEmail()}
                       disabled={loading}
@@ -76,8 +121,10 @@ export default function Auth() {
                       >
                       <Text style={styles.loginButtonText}>Sign in</Text>
                       </TouchableOpacity>
-                  </View>
-                  <View>
+                    </View>
+                  )}
+                  {isSignUp && (
+                    <View>
                       <TouchableOpacity
                       onPress={() => signUpWithEmail()}
                       disabled={loading}
@@ -85,7 +132,8 @@ export default function Auth() {
                       >
                       <Text style={styles.loginButtonText}>Sign up</Text>
                       </TouchableOpacity>
-                  </View>
+                    </View>
+                  )}
                 </View>
             </View>
         </SafeAreaView>
@@ -130,7 +178,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "rgb(2, 20, 48)",
     fontSize: 18,
-    width: 80,
+    width: 100,
   },
   loginButton: {
     backgroundColor: "#2b70e4",
@@ -140,6 +188,35 @@ const styles = StyleSheet.create({
     width: 140,
   },
   loginButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  tabContainer: {
+    flexDirection: "row",
+    width: 220,
+    alignSelf: "center",
+    justifyContent: "center",
+    gap: 25,
+    padding: 5,
+    marginBottom: 5,
+  },
+  activeTab: {
+    backgroundColor: "rgb(2, 20, 48)",
+    boxShadow: "0px 1px 3px rgb(2, 20, 48)",
+    padding: 5,
+    borderRadius: 5,
+    width: 90,
+  },
+  inactiveTab: {
+    backgroundColor: "#d0d0d0ff",
+    boxShadow: "0px 1px 3px #d0d0d0ff",
+    padding: 5,
+    borderRadius: 5,
+    width: 90,
+  },
+  tabText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
