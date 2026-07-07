@@ -51,10 +51,12 @@ export default function NewSet() {
     }
     const router = useRouter();
     const createSet = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
         const { data: setData, error: setError } = await supabase.from('sets').insert([
-            {   
-                subject: info.subject, 
-                description: info.description, 
+            {
+                subject: info.subject,
+                description: info.description,
+                user_id: user.id,
             },
         ]).select().single();
         if (setError) {
@@ -65,6 +67,7 @@ export default function NewSet() {
             set_id: setData.id,
             question: card.question,
             answers: card.answers,
+            user_id: user.id,
         }))
         const { error: cardError } = await supabase.from('cards').insert(cardRows);
         if (cardError) {

@@ -1,13 +1,15 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link, Stack, useFocusEffect } from "expo-router";
+import { Stack, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Library() {
     const [sets, setSets] = useState([]);
+    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const router = useRouter();
     useFocusEffect(useCallback(() => {
         const fetchSets = async() => {
             let { data, error } = await supabase.from('sets').select('*, cards(count)');
@@ -17,20 +19,39 @@ export default function Library() {
             }
             setSets(data);
         }
+        const checkUserLoggedIn = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUserLoggedIn(user !== null);
+        }
+        checkUserLoggedIn();
         fetchSets();
     }, []));
+    const userPressed = () => {
+        if (userLoggedIn) {
+            router.push("create/newSet");
+        } else {
+            router.push("auth/login");
+        }
+    }
+    const userProfilePressed = () => {
+        if (userLoggedIn) {
+            router.push("user/account");
+        } else {
+            router.push("auth/login");
+        }
+    }
     return (
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerRight: () => (
-                    <Link href={"/create/newSet"} style={{ marginRight: 18 }}>
+                    <Pressable style={{ marginRight: 18 }} onPress={userPressed}>
                         <Feather name="plus" size={24} color="rgb(2, 20, 48)" />
-                    </Link>
+                    </Pressable>
                 ),
                 headerLeft: () => (
-                    <Link href={"/auth/login"} style={{ marginLeft: 18 }}>
+                    <Pressable style={{ marginLeft: 18 }} onPress={userProfilePressed}>
                         <Feather name="user" size={24} color="rgb(2, 20, 48)" />
-                    </Link>
+                    </Pressable>
                 )
             }} />
             <SafeAreaView>
