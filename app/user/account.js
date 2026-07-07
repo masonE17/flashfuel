@@ -1,14 +1,17 @@
 import { supabase } from "@/lib/supabase";
+import { Feather } from "@expo/vector-icons";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function Account() {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
     useFocusEffect(useCallback(() => {
         const fetchUser = async() => {
             const { data: { user } } = await supabase.auth.getUser();
@@ -20,9 +23,19 @@ export default function Account() {
             }
             const fullProfile = { ...profile, email: user.email };
             setUser(fullProfile);
+            setLoading(false);
         }
         fetchUser();
     }, []));
+    const signOut = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.log("Error signing out...", error.message);
+            return;
+        }
+        setUser(null);
+        setLoading(true);
+    };
    return (
        <SafeAreaProvider>
            <SafeAreaView>
@@ -49,10 +62,16 @@ export default function Account() {
                        </View>
                    </View>
                </View>
-               <View style={styles.logoutContainer}>
-                   <Text style={styles.logoutText}>Logout</Text>
-                   <MaterialIcons name="logout" size={20} color="white" />
-               </View>
+               {loading && (
+                    <TouchableOpacity style={styles.buttonContainer} onPress={() => {router.push("auth/login")}}>
+                        <Text style={styles.buttonText}>Login/Join</Text>
+                        <Feather name="user" size={20} color="white" />
+                    </TouchableOpacity>
+               )}
+               <TouchableOpacity style={styles.buttonContainer} onPress={signOut}>
+                    <Text style={styles.buttonText}>Logout</Text>
+                    <MaterialIcons name="logout" size={20} color="white" />
+               </TouchableOpacity>
            </SafeAreaView>
        </SafeAreaProvider>
    );
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
        fontSize: 16,
        color: "rgb(2, 20, 48)",
    }, 
-   logoutContainer: {
+   buttonContainer: {
        borderColor: "black",
        borderWidth: 2,
        margin: 10,
@@ -123,7 +142,7 @@ const styles = StyleSheet.create({
        flexDirection: "row",
        gap: 5,
    },
-   logoutText: {
+   buttonText: {
        color: "white",
        fontSize: 16,
    }

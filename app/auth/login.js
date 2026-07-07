@@ -22,6 +22,8 @@ export default function Auth() {
     })
     if (error) {
       Alert.alert(error.message);
+    } else {
+      router.push("/user/account");
     }
     setLoading(false);
     setEmail("");
@@ -53,93 +55,94 @@ export default function Auth() {
 
   return (
     <SafeAreaProvider>
-        <Stack.Screen options={{
-            headerLeft: () => (
-                <Link href={"/create/library"} style={{ marginLeft: 18 }}>
-                    <Feather name="arrow-left" size={24} color="rgb(2, 20, 48)" />
-                </Link>
-            )
-        }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-            <View>
-                <Image source={login} style={styles.image}/>
-                <View style={styles.tabContainer}>
-                  <TouchableOpacity
-                    onPress={() => setIsSignUp(false)}
-                    style={ isSignUp ? styles.inactiveTab : styles.activeTab }
-                  >
-                    <Text style={styles.tabText}>Login</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setIsSignUp(true)}
-                    style={ isSignUp ? styles.activeTab : styles.inactiveTab }
-                  >
-                    <Text style={styles.tabText}>Join</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{ height: 5, width: "90%", backgroundColor: "rgb(2, 20, 48)", alignSelf: "center", borderRadius: 10 }}></View>
-                <View style={styles.loginContainer}>
-                  {isSignUp && (
-                    <View style={styles.userContainer}>
-                      <Text style={styles.userLabel}>Username</Text>
-                      <TextInput
-                      onChangeText={(text) => setUsername(text)}
-                      value={username}
-                      placeholder="Username"
-                      autoCapitalize="none"
-                      style={styles.userInput}
-                      />
-                    </View>
-                  )}
-                  <View style={styles.userContainer}>
-                      <Text style={styles.userLabel}>Email</Text>
-                      <TextInput
-                      onChangeText={(text) => setEmail(text)}
-                      value={email}
-                      placeholder="email@address.com"
-                      autoCapitalize="none"
-                      style={styles.userInput}
-                      />
-                  </View>
-                  <View style={styles.userContainer}>
-                      <Text style={styles.userLabel}>Password</Text>
-                      <TextInput
-                      onChangeText={(text) => setPassword(text)}
-                      value={password}
-                      secureTextEntry={true}
-                      placeholder="Password"
-                      autoCapitalize="none"
-                      style={styles.userInput}
-                      />
-                  </View>
-                  {!isSignUp && (
-                    <View>
-                      <TouchableOpacity
-                      onPress={() => signInWithEmail()}
-                      disabled={loading}
-                      style={styles.loginButton}
-                      >
-                      <Text style={styles.loginButtonText}>Sign in</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  {isSignUp && (
-                    <View>
-                      <TouchableOpacity
-                      onPress={() => signUpWithEmail()}
-                      disabled={loading}
-                      style={styles.loginButton}
-                      >
-                      <Text style={styles.loginButtonText}>Sign up</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
+      <Stack.Screen options={{
+        headerLeft: () => (
+          <Link href={"/create/library"} style={{ marginLeft: 18 }}>
+            <Feather name="arrow-left" size={24} color="rgb(2, 20, 48)" />
+          </Link>
+        )
+      }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View>
+          <Image source={login} style={styles.image}/>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              onPress={() => setIsSignUp(false)}
+              style={ isSignUp ? styles.inactiveTab : styles.activeTab }
+            >
+              <Text style={styles.tabText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setIsSignUp(true)}
+              style={ isSignUp ? styles.activeTab : styles.inactiveTab }
+            >
+              <Text style={styles.tabText}>Join</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ height: 5, width: "90%", backgroundColor: "rgb(2, 20, 48)", alignSelf: "center", borderRadius: 10 }}></View>
+          <View style={styles.loginContainer}>
+            {isSignUp && (
+              <View style={styles.userContainer}>
+                <Text style={styles.userLabel}>Username</Text>
+                <TextInput
+                  onChangeText={(text) => setUsername(text)}
+                  value={username}
+                  placeholder="Username"
+                  autoCapitalize="none"
+                  style={styles.userInput}
+                />
+              </View>
+            )}
+            <View style={styles.userContainer}>
+              <Text style={styles.userLabel}>Email</Text>
+              <TextInput
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+                placeholder="email@address.com"
+                autoCapitalize="none"
+                style={styles.userInput}
+              />
             </View>
-        </SafeAreaView>
+            <View style={styles.userContainer}>
+              <Text style={styles.userLabel}>Password</Text>
+              <TextInput
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry={true}
+                placeholder="Password"
+                autoCapitalize="none"
+                style={styles.userInput}
+              />
+            </View>
+            {!isSignUp && (
+              <View>
+                <TouchableOpacity
+                  onPress={() => signInWithEmail()}
+                  disabled={loading}
+                  style={styles.loginButton}
+                >
+                  <Text style={styles.loginButtonText}>Sign in</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {isSignUp && (
+              <View>
+                <TouchableOpacity
+                  onPress={() => signUpWithEmail()}
+                  disabled={loading}
+                  style={styles.loginButton}
+                >
+                  <Text style={styles.loginButtonText}>Sign up</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </SafeAreaView>
     </SafeAreaProvider>
   )
 }
+
 const styles = StyleSheet.create({
   image: {
     width: 300,
@@ -182,7 +185,6 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#2b70e4",
-    boxShadow: "0px 1px 3px rgb(2, 20, 48)",
     padding: 10,
     borderRadius: 5,
     width: 140,
@@ -204,14 +206,12 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     backgroundColor: "rgb(2, 20, 48)",
-    boxShadow: "0px 1px 3px rgb(2, 20, 48)",
     padding: 5,
     borderRadius: 5,
     width: 90,
   },
   inactiveTab: {
     backgroundColor: "#d0d0d0ff",
-    boxShadow: "0px 1px 3px #d0d0d0ff",
     padding: 5,
     borderRadius: 5,
     width: 90,
