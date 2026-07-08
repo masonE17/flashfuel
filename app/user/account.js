@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
        padding: 10,
    },
    userProfilePhoto: {
-       borderColor: "black",
+       borderColor: "rgb(2, 20, 48)",
+       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
        borderWidth: 2,
        borderRadius: 50,
        width: 80,
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
    },
    userDetail: {
        borderColor: "rgb(2, 20, 48)",
+       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
        borderWidth: 2,
        borderRadius: 8,
        padding: 7,
@@ -129,7 +131,8 @@ const styles = StyleSheet.create({
        color: "rgb(2, 20, 48)",
    }, 
    buttonContainer: {
-       borderColor: "black",
+       borderColor: "rgb(2, 20, 48)",
+       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
        borderWidth: 2,
        margin: 10,
        padding: 10,

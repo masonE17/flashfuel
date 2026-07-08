@@ -1,11 +1,31 @@
+import { supabase } from "@/lib/supabase";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const logo = require("../assets/images/FlashFuelLogo.png");
   const home = require("../assets/images/FlashFuelHome.png");
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+  useFocusEffect(useCallback(() => {
+    const fetchUser = async() => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+          console.log("No authenticated user found.");
+      }
+      let { data: profile, error } = await supabase.from('profile').select('*').eq('user_id', user.id).single();
+          if (error) {
+            console.log("Error fetching user...", error.message);
+            return;
+          }
+          setUser(profile); 
+    }
+    fetchUser();
+  }, []));
+  console.log("User in index.js: ", user);
   return (
     <SafeAreaProvider>
       <SafeAreaView>
@@ -18,12 +38,12 @@ export default function Index() {
         </View>
         <View style={styles.contentContainer}>
           <View style={styles.userContainer}>
-            <Text style={styles.userHeader}>Welcome back, <Text style={{ color: "#2b70e4", fontSize: 28, fontWeight: "bold"}}>Mason</Text></Text>
+            <Text style={styles.userHeader}>Welcome back, <Text style={{ color: "#2b70e4", fontSize: 28, fontWeight: "bold"}}>{user?.username || "Guest"}</Text></Text>
             <Text style={styles.subText}>Ready to learn today?</Text>
           </View>
           <View style={styles.homeContainer}>
             <Image source={home} style={styles.homeImage}/>
-            <View style={styles.studyContainer}>
+            <TouchableOpacity style={styles.studyContainer} onPress={() => router.push("create/library")}>
               <View style={styles.studyContent}>
                 <View>
                   <Text style={styles.studyText}>Start Studying</Text>
@@ -31,13 +51,15 @@ export default function Index() {
                 </View>
                 <FontAwesome name="arrow-right" size={24} color="white" />
               </View>
+            </TouchableOpacity>
+            <View style={styles.streakContainer}>
+              <Text style={styles.streakText}>Current Streak</Text>
+              <Text style={styles.streakText}><Text style={{ color: "#2b70e4", fontWeight: "bold" }}>7/10</Text> days</Text>
+              <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 1, height: 12, borderRadius: 5, width: "100%", marginTop: 5, boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", }}>
+                <View style={{ backgroundColor: "#2b70e4", height: 10, borderRadius: 5, width: "70%" }}></View>
+              </View>
             </View>
           </View>
-          <Text style={styles.streakText}>Current Streak</Text>
-          <View style={styles.streakContainer}>
-            <View style={styles.streakBar}></View>
-          </View>
-          <Text style={styles.streakCount}>7/10 Days</Text>
         </View>
         <View style={styles.quickActionsBorder}>
           <View style={styles.quickActionsHeader}>
@@ -45,16 +67,16 @@ export default function Index() {
             <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4}}></View>
           </View>
           <View style={styles.quickActionsContainer}>
-            <View style={styles.quickAction}>
+            <TouchableOpacity style={styles.quickAction} onPress={() => router.push("create/library")}>
               <FontAwesome name="bookmark-o" size={24} color="#2b70e4" />
               <Text style={styles.quickActionMainText}>My Sets</Text>
               <Text style={styles.quickActionSubText}>Browse Library</Text>
-            </View>
-            <View style={styles.quickAction}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quickAction} onPress={() => router.push("create/newSet")}>
               <FontAwesome name="pencil-square-o" size={24} color="#2b70e4" />
               <Text style={styles.quickActionMainText}>New Set</Text>
               <Text style={styles.quickActionSubText}>Create Cards</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
@@ -77,6 +99,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 100,
     borderColor: "rgb(2, 20, 48)",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 2,
   },
   headerText: {
@@ -91,7 +114,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   contentContainer: {
-    padding: 4,
+    padding: 8,
     marginLeft: 20,
     marginRight: 20,
     height: 420,
@@ -99,31 +122,6 @@ const styles = StyleSheet.create({
   subText: {
     fontSize: 16,
     color: "#4f4f4f",
-  },
-  streakText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "rgb(2, 20, 48)",
-    textAlign: "center",
-    marginBottom: 5,
-  },
-  streakContainer: {
-    borderColor: "rgb(2, 20, 48)",
-    borderWidth: 2,
-    borderRadius: 12,
-    height: 14,
-  },
-  streakBar: {
-    backgroundColor: "#2b70e4",
-    height: "100%",
-    width: "75%",
-    borderRadius: 12,
-  },
-  streakCount: {
-    fontSize: 16,
-    color: "rgb(2, 20, 48)",
-    textAlign: "center",
-    marginTop: 5,
   },
   userContainer: {
     padding: 6,
@@ -146,11 +144,13 @@ const styles = StyleSheet.create({
     width: 175,
     height: 175,
     borderColor: "rgb(2, 20, 48)",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 2,
   },
   studyContainer: {
     width: 250,
     borderColor: "rgb(2, 20, 48)",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 1,
     padding: 12,
     marginTop: 10,
@@ -171,10 +171,19 @@ const styles = StyleSheet.create({
     color: "#a6a6a6",
     fontSize: 12,
   },
+  streakContainer: {
+    width: 320,
+    marginTop: 15,
+    alignItems: "center",
+  },
+  streakText: {
+    fontSize: 16,
+    color: "rgb(2, 20, 48)",
+  },
   quickActionsBorder: {
     padding: 10,
     gap: 8,
-    marginTop: 10,
+    marginTop: 5,
     marginLeft: 20,
     marginRight: 20,
   },
@@ -193,6 +202,7 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     borderColor: "rgb(2, 20, 48)",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 2,
     borderRadius: 18,
     paddingLeft: 10,

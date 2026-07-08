@@ -73,6 +73,7 @@ export default function Library() {
 const styles = StyleSheet.create({
     setContainer: {
         borderColor: "rgb(2, 20, 48)",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         borderWidth: 2,
         borderRadius: 10,
         padding: 10,
