@@ -25,7 +25,6 @@ export default function Index() {
     }
     fetchUser();
   }, []));
-  console.log("User in index.js: ", user);
   return (
     <SafeAreaProvider>
       <SafeAreaView>
