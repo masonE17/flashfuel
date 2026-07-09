@@ -1,9 +1,9 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link, Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function NewSet() {
@@ -74,15 +74,17 @@ export default function NewSet() {
             console.log("Error creating cards... " + cardError.message, cardError);
             return;
         }
+        setInfo({ subject: "", description: "" });
+        setCards([{ question: "", answers: [{ text: "", correct: false }] }]);
         router.push("/create/library");
     }
     return (
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerLeft: () => (
-                    <Link href="/create/library" style={{ marginLeft: 18 }}>
+                    <Pressable onPress={ () => router.push("create/library") } style={{ marginLeft: 10 }}>
                         <Feather name="arrow-left" size={24} color="rgb(2, 20, 48)" />
-                    </Link>
+                    </Pressable>
                 ),
             }} />
             <SafeAreaView>
