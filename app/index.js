@@ -55,7 +55,7 @@ export default function Index() {
               <Text style={styles.streakText}>Current Streak</Text>
               <Text style={styles.streakText}><Text style={{ color: "#2b70e4", fontWeight: "bold" }}>7/10</Text> days</Text>
               <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 1, height: 12, borderRadius: 5, width: "100%", marginTop: 5, boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", }}>
-                <View style={{ backgroundColor: "#2b70e4", height: 10, borderRadius: 5, width: "70%" }}></View>
+                <View style={{ backgroundColor: "#2b70e4", height: 10, borderRadius: 4, width: "70%" }}></View>
               </View>
             </View>
           </View>
