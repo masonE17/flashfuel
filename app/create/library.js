@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Stack, useFocusEffect, useRouter } from "expo-router";
+import { Link, Stack, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -63,7 +63,9 @@ export default function Library() {
                             <Text style={styles.setDescription}>{set.description}</Text>
                             <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
                         </View>
-                        <MaterialIcons name="quiz" size={50} color="rgb(2, 20, 48)" />
+                        <Link href={{ pathname: "practice/quiz", params: { setId : set.id} }}>
+                            <MaterialIcons name="quiz" size={50} color="rgb(2, 20, 48)" />
+                        </Link>
                     </View>
                 ))}
             </SafeAreaView>

@@ -39,5 +39,10 @@ export default function RootLayout() {
         title: "Login",
         tabBarStyle: { display: "none" },
       }} />
+      <Tabs.Screen name="practice/quiz" options={{
+        href: null,
+        title: "Quiz",
+        tabBarStyle: { display: "none" },
+      }} />
   </Tabs>
 }
