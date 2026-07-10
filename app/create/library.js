@@ -40,6 +40,20 @@ export default function Library() {
             router.push("auth/login");
         }
     }
+    const deleteSet = async (setId) => {
+            const { error } = await supabase.from('sets').delete().eq('id', setId);
+            if (error) {
+                console.log("Error deleting set...", error.message);
+                return;
+            }
+            sets.forEach((set, index) => {
+                if (set.id === setId) {
+                    const updatedSets = [...sets];
+                    updatedSets.splice(index, 1);
+                    setSets(updatedSets);
+                }
+            });
+        }
     return (
         <SafeAreaProvider>
             <Stack.Screen options={{
@@ -58,7 +72,12 @@ export default function Library() {
                 {sets.map((set) => (
                     <View key={set.id} style={styles.setContainer}>
                         <View style={styles.setInfo}>
-                            <Text style={styles.setSubject}>{set.subject}</Text>
+                            <View style={styles.setHeader}>
+                                <Text style={styles.setSubject}>{set.subject}</Text>
+                                <Pressable onPress={() => deleteSet(set.id)}>
+                                    <MaterialIcons name="delete" size={24} color="white" />
+                                </Pressable>
+                            </View>
                             <View style={{ borderBottomColor: "white", borderBottomWidth: 2, marginTop: 4 }}></View>
                             <Text style={styles.setDescription}>{set.description}</Text>
                             <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
@@ -89,6 +108,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         width: 250,
+    },
+    setHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     setSubject: {
         fontSize: 18,
