@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link, Stack, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Library() {
@@ -40,6 +40,17 @@ export default function Library() {
             router.push("auth/login");
         }
     }
+    const confirmDelete = (setId) => {
+        Alert.alert("Confirm Delete", "Are you sure you want to delete this set?", [
+            {
+                text: "Delete",
+                onPress: () => deleteSet(setId),
+            },
+            {
+                text: "Cancel",
+            }
+        ])
+    }
     const deleteSet = async (setId) => {
             const { error } = await supabase.from('sets').delete().eq('id', setId);
             if (error) {
@@ -74,7 +85,7 @@ export default function Library() {
                         <View style={styles.setInfo}>
                             <View style={styles.setHeader}>
                                 <Text style={styles.setSubject}>{set.subject}</Text>
-                                <Pressable onPress={() => deleteSet(set.id)}>
+                                <Pressable onPress={() => confirmDelete(set.id)}>
                                     <MaterialIcons name="delete" size={24} color="white" />
                                 </Pressable>
                             </View>
