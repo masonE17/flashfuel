@@ -41,7 +41,9 @@ export default function NewSet() {
     }
     const isCorrect = (cardIndex, ansIndex) => {
         const newCards = cards.map((card, ci) => {
-            if (ci !== cardIndex) return card;
+            if (ci !== cardIndex) {
+                return card;
+            }
             return {
                 ...card,
                 answers: card.answers.map((ans, ai) => ({ ...ans, correct: ai === ansIndex ? !ans.correct : false })),
@@ -131,7 +133,7 @@ export default function NewSet() {
                                 {card.answers.map((answer, ansIndex) => (
                                     <View key={ansIndex} style={styles.answerContainer}>
                                         <TouchableOpacity onPress={() => isCorrect(cardIndex, ansIndex)}>
-                                            <MaterialIcons name={answer.correct ? "check-box" : "check-box-outline-blank"} size={24} color={answer.correct ? "green" : "black"} />
+                                            <MaterialIcons name={answer.correct ? "check-box" : "check-box-outline-blank"} size={24} color={answer.correct ? "green" : "rgb(2, 20, 48)"} />
                                         </TouchableOpacity>
                                         <TextInput
                                             value={answer.text}
