@@ -2,12 +2,13 @@ import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useRef, useState } from "react";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Quiz() {
     const router = useRouter();
+    const scrollViewRef = useRef(null);
     const [cards, setCards] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState([]);
     const { setId } = useLocalSearchParams();
@@ -16,6 +17,7 @@ export default function Quiz() {
     useFocusEffect(useCallback(() => {
         const fetchCards = async() => {
             let { data: cards, error } = await supabase.from('cards').select('*').eq('set_id', setId);
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
             if (error) {
                 console.log("Error fetching cards...", error.message);
                 return;
@@ -35,8 +37,23 @@ export default function Quiz() {
                 correctAnswerCount++;
             }
         })
+        Alert.alert("Quiz Result: " + (correctAnswerCount / totalQuestion * 100).toFixed(0) + "%", "You answered " + correctAnswerCount + " out of " + totalQuestion + " questions correctly.", [
+            {
+                text: "Retake Quiz",
+                onPress: () => {
+                    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+                }
+            },
+            {
+                text: "Back to Library",
+                onPress: () => {
+                    router.push("create/library")
+                    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+                }
+            }
+        ]);
         setSelectedAnswer([]);
-        console.log(`You answered ${correctAnswerCount} out of ${totalQuestion} questions correctly.`);
+        correctAnswerCount = 0;
     }
     return (
         <SafeAreaProvider>
@@ -49,7 +66,7 @@ export default function Quiz() {
             }}
             />
             <SafeAreaView>
-                <ScrollView>
+                <ScrollView ref={scrollViewRef}>
                     {cards.map((card, cardIndex) => (
                         <View key={cardIndex} style={styles.cardContainer}>
                             <Text style={styles.question}>Question {cardIndex + 1}: {card.question}</Text>
