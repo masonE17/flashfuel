@@ -13,3 +13,6 @@
 - [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/)
 - [Expo Router](https://docs.expo.dev/router/introduction/) — file-based navigation
 - [Supabase](https://supabase.com/) — auth, database (Postgres), and row-level security
+</br>
+</br>
+<img src="assets/images/FlashFuelLogo.png" width="300">
