@@ -51,13 +51,6 @@ export default function Index() {
                 <FontAwesome name="arrow-right" size={24} color="white" />
               </View>
             </TouchableOpacity>
-            <View style={styles.streakContainer}>
-              <Text style={styles.streakText}>Current Streak</Text>
-              <Text style={styles.streakText}><Text style={{ color: "#2b70e4", fontWeight: "bold" }}>7/10</Text> days</Text>
-              <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 1, height: 12, borderRadius: 5, width: "100%", marginTop: 5, boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", }}>
-                <View style={{ backgroundColor: "#2b70e4", height: 10, borderRadius: 4, width: "70%" }}></View>
-              </View>
-            </View>
           </View>
         </View>
         <View style={styles.quickActionsBorder}>
@@ -77,6 +70,9 @@ export default function Index() {
               <Text style={styles.quickActionSubText}>Create Cards</Text>
             </TouchableOpacity>
           </View>
+        </View>
+        <View style={styles.studyMessageContainer}>
+            <Text style={styles.subText}>Consistency is key to mastering your material!</Text>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -116,11 +112,12 @@ const styles = StyleSheet.create({
     padding: 8,
     marginLeft: 20,
     marginRight: 20,
-    height: 420,
+    height: 350,
   },
   subText: {
     fontSize: 16,
     color: "#4f4f4f",
+    textAlign: "center",
   },
   userContainer: {
     padding: 6,
@@ -170,14 +167,11 @@ const styles = StyleSheet.create({
     color: "#a6a6a6",
     fontSize: 12,
   },
-  streakContainer: {
-    width: 320,
-    marginTop: 15,
-    alignItems: "center",
-  },
-  streakText: {
-    fontSize: 16,
-    color: "rgb(2, 20, 48)",
+  studyMessageContainer: {
+    width: "85%",
+    alignSelf: "center",
+    marginTop: 10,
+    padding: 5,
   },
   quickActionsBorder: {
     padding: 10,
@@ -200,6 +194,7 @@ const styles = StyleSheet.create({
     width: 116,
   },
   quickAction: {
+    backgroundColor: "white",
     borderColor: "rgb(2, 20, 48)",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 2,
