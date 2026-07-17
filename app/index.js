@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     width: 116,
   },
   quickAction: {
-    backgroundColor: "white",
+    backgroundColor: "#e1e1e1ff",
     borderColor: "rgb(2, 20, 48)",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     borderWidth: 2,

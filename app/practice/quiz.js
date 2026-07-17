@@ -9,12 +9,21 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 export default function Quiz() {
     const router = useRouter();
     const scrollViewRef = useRef(null);
+    const [sets, setSets] = useState([]);
     const [cards, setCards] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState([]);
     const { setId } = useLocalSearchParams();
     const totalQuestion = cards.length;
     let correctAnswerCount = 0;
     useFocusEffect(useCallback(() => {
+        const fetchSets = async() => {
+            let { data: sets, error } = await supabase.from('sets').select('*').eq('id', setId).single();
+            if (error) {
+                console.log("Error fetching sets...", error.message);
+                return;
+            }
+            setSets(sets);
+        }
         const fetchCards = async() => {
             let { data: cards, error } = await supabase.from('cards').select('*').eq('set_id', setId);
             scrollViewRef.current?.scrollTo({ y: 0, animated: true });
@@ -24,6 +33,7 @@ export default function Quiz() {
             }
             setCards(cards);
         }
+        fetchSets();
         fetchCards();
     }, [setId]));
     const selectAnswer = (cardIndex, ansIndex) => {
@@ -67,9 +77,14 @@ export default function Quiz() {
             />
             <SafeAreaView>
                 <ScrollView ref={scrollViewRef}>
+                    <View style={styles.cardTextContainer}>
+                        <Text style={styles.cardSubject}>{sets.subject}</Text>
+                        <Text style={styles.cardDescription}>{sets.description}</Text>
+                    </View>
                     {cards.map((card, cardIndex) => (
                         <View key={cardIndex} style={styles.cardContainer}>
-                            <Text style={styles.question}>Question {cardIndex + 1}: {card.question}</Text>
+                            <Text style={styles.question}><Text style={{ color: "#2b70e4" }}>Question {cardIndex + 1}:</Text> {card.question}</Text>
+                            <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 3, borderRadius: 2, marginBottom: 5 }}></View>
                             <View>
                                 {card.answers.map((answer, ansIndex) => (
                                     <View key={ansIndex} style={styles.answerContainer}>
@@ -91,12 +106,29 @@ export default function Quiz() {
     );
 }
 const styles = StyleSheet.create({
+    cardTextContainer: {
+        marginLeft: 10,
+        marginRight: 10,
+        padding: 10,
+        alignItems: "center",
+    },
+    cardSubject: {
+        fontSize: 30,
+        fontWeight: "bold",
+        color: "rgb(2, 20, 48)",
+    },
+    cardDescription: {
+        fontSize: 14,
+        color: "rgb(2, 20, 48)",
+    },
     cardContainer: {
         borderColor: "rgb(2, 20, 48)",
         borderWidth: 2,
         borderRadius: 10,
         padding: 12,
-        margin: 10,
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom: 15,
         borderRadius: 8,
     },
     question: {

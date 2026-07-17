@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link, Stack, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
@@ -86,15 +87,15 @@ export default function Library() {
                             <View style={styles.setHeader}>
                                 <Text style={styles.setSubject}>{set.subject}</Text>
                                 <Pressable onPress={() => confirmDelete(set.id)}>
-                                    <MaterialIcons name="delete" size={24} color="white" />
+                                    <MaterialIcons name="delete" size={24} color="#2b70e4" />
                                 </Pressable>
                             </View>
-                            <View style={{ borderBottomColor: "white", borderBottomWidth: 2, marginTop: 4 }}></View>
+                            <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4 }}></View>
                             <Text style={styles.setDescription}>{set.description}</Text>
                             <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
                         </View>
                         <Link href={{ pathname: "practice/quiz", params: { setId : set.id} }}>
-                            <MaterialIcons name="quiz" size={50} color="rgb(2, 20, 48)" />
+                            <FontAwesome name="pencil-square-o" size={50} color="#2b70e4" />
                         </Link>
                     </View>
                 ))}
@@ -105,17 +106,21 @@ export default function Library() {
 const styles = StyleSheet.create({
     setContainer: {
         borderColor: "rgb(2, 20, 48)",
+        borderWidth: 2,
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         borderWidth: 2,
         borderRadius: 10,
         padding: 10,
         margin: 10,
         flexDirection: "row",
-        gap: 45,
+        gap: 42,
         alignItems: "center",
     },
     setInfo: {
-        backgroundColor: "rgb(2, 20, 48)",
+        backgroundColor: "#e1e1e1ff",
+        borderColor: "rgb(2, 20, 48)",
+        borderWidth: 2,
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         borderRadius: 10,
         padding: 10,
         width: 250,
@@ -128,15 +133,18 @@ const styles = StyleSheet.create({
     setSubject: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "white",
+        color: "rgb(2, 20, 48)",
     },
     setDescription: {
         fontSize: 14,
-        color: "#a6a6a6",
+        color: "#4f4f4f",
         paddingTop: 6,
+        alignSelf: "center",
     },
     setCount: {
         fontSize: 14,
-        color: "#a6a6a6",
+        color: "#4f4f4f",
+        alignSelf: "center",
+        fontWeight: "bold",
     }
 })
