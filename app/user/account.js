@@ -4,7 +4,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -27,6 +27,17 @@ export default function Account() {
         }
         fetchUser();
     }, []));
+    const confirmSignOut = () => {
+        Alert.alert("Confirm Sign Out", "Are you sure you want to sign out?", [
+            {
+                text: "Sign Out",
+                onPress: signOut
+            },
+            {
+                text: "Cancel",
+            }
+        ])
+    }
     const signOut = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) {
@@ -68,7 +79,7 @@ export default function Account() {
                         <Feather name="user" size={20} color="white" />
                     </TouchableOpacity>
                )}
-               <TouchableOpacity style={styles.buttonContainer} onPress={signOut}>
+               <TouchableOpacity style={styles.buttonContainer} onPress={confirmSignOut}>
                     <Text style={styles.buttonText}>Logout</Text>
                     <MaterialIcons name="logout" size={20} color="white" />
                </TouchableOpacity>
@@ -78,7 +89,6 @@ export default function Account() {
 }
 const styles = StyleSheet.create({
    profileContainer: {
-       marginTop: 10,
        padding: 10,
        justifyContent: "center",
        alignItems: "center",
@@ -148,5 +158,6 @@ const styles = StyleSheet.create({
    buttonText: {
        color: "white",
        fontSize: 16,
+       fontWeight: "bold",
    }
 })

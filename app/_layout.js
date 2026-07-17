@@ -16,12 +16,14 @@ export default function RootLayout() {
       tabBarIcon: ({ color, size }) => (
         <FontAwesome name="book" size={size} color={color} />
       ),
+      tabBarStyle: {
+        backgroundColor: "rgb(2, 20, 48)",
+      }
       }}/>
     <Tabs.Screen name="create/newSet" options={{ 
       href: null ,
       title: "New Set",
-      tabBarStyle: { display: "none" },
-      }} />
+    }} />
     <Tabs.Screen name="user/account" options={{
       headerShown: false,
       title: "Account",
