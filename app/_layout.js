@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from "expo-router";
 
 export default function RootLayout() {
-  return <Tabs screenOptions={{ tabBarActiveTintColor: "#2b70e4", tabBarStyle: {backgroundColor: "rgb(2, 20, 48)"}, tabBarInactiveTintColor: "white" }}>
+  return <Tabs screenOptions={{ tabBarActiveTintColor: "#2b70e4", tabBarStyle: {backgroundColor: "rgb(2, 20, 48)"}, tabBarInactiveTintColor: "white", tabBarLabelStyle: { fontSize: 10, fontWeight: "bold", marginTop: 2 } }}>
     <Tabs.Screen name="index" options={{
       headerShown: false,
       title: "Home",
@@ -13,6 +13,7 @@ export default function RootLayout() {
     <Tabs.Screen name="create/library" options={{
       headerShown: true,
       title: "Library",
+      headerTitleStyle: { fontWeight: "bold", fontSize: 20, color: "#rgb(2, 20, 48)" },
       tabBarIcon: ({ color, size }) => (
         <FontAwesome name="book" size={size} color={color} />
       ),
