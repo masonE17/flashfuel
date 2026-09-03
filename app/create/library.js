@@ -1,15 +1,15 @@
 import { supabase } from "@/lib/supabase";
 import { Feather } from "@expo/vector-icons";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link, Stack, useFocusEffect, useRouter } from "expo-router";
+import { Stack, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Library() {
     const [sets, setSets] = useState([]);
     const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
     const router = useRouter();
     useFocusEffect(useCallback(() => {
         const fetchSets = async() => {
@@ -24,6 +24,19 @@ export default function Library() {
             const { data: { user } } = await supabase.auth.getUser();
             setUserLoggedIn(user !== null);
         }
+        const fetchUser = async() => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                return;
+            }
+            let { data: profile, error } = await supabase.from('profile').select('*').eq('user_id', user.id).single();
+            if (error) {
+                console.log("Error fetching user...", error.message);
+                return;
+            }
+            setUser(profile);
+        }
+        fetchUser();
         checkUserLoggedIn();
         fetchSets();
     }, []));
@@ -66,64 +79,90 @@ export default function Library() {
                 }
             });
         }
+    const navigateToQuiz = (setId) => {
+        router.push(`practice/quiz?setId=${setId}`);
+    }
     return (
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerRight: () => (
                     <Pressable style={{ marginRight: 18 }} onPress={userPressed}>
-                        <Feather name="plus" size={24} color="rgb(2, 20, 48)" />
+                        <Feather name="plus" size={28} color="#2b70e4" />
                     </Pressable>
                 ),
                 headerLeft: () => (
                     <Pressable style={{ marginLeft: 18 }} onPress={userProfilePressed}>
-                        <Feather name="user" size={24} color="rgb(2, 20, 48)" />
+                        <Feather name="user" size={28} color="#2b70e4" />
                     </Pressable>
                 )
             }} />
-            <SafeAreaView>
-                {sets.map((set) => (
-                    <View key={set.id} style={styles.setContainer}>
-                        <View style={styles.setInfo}>
-                            <View style={styles.setHeader}>
-                                <Text style={styles.setSubject}>{set.subject}</Text>
-                                <Pressable onPress={() => confirmDelete(set.id)}>
-                                    <MaterialIcons name="delete" size={24} color="#2b70e4" />
-                                </Pressable>
+            <ScrollView>
+                <View style={styles.cardHeaderContainer}>
+                    <Text style={styles.cardHeaderText}>Ready to learn, <Text style={styles.cardHeaderUser}>{user?.username || "User"}</Text>?</Text>
+                    <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 2, borderRadius: 5, marginTop: 7, width: "100%" }}></View>
+                </View>
+                <SafeAreaView>
+                    {sets.map((set) => (
+                        <Pressable onPress={() => navigateToQuiz(set.id)} key={set.id}>
+                            <View style={styles.libraryContainer}>
+                                <View style={styles.setContainer}>
+                                    <View style={styles.setInfo}>
+                                        <View style={styles.setHeader}>
+                                            <Text style={styles.setSubject}>{set.subject}</Text>
+                                            <Pressable onPress={() => confirmDelete(set.id)}>
+                                                <MaterialIcons name="delete" size={26} color="#2b70e4" />
+                                            </Pressable>
+                                        </View>
+                                        <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4 }}></View>
+                                        <Text style={styles.setDescription}>{set.description}</Text>
+                                        <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4 }}></View>
-                            <Text style={styles.setDescription}>{set.description}</Text>
-                            <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
-                        </View>
-                        <Link href={{ pathname: "practice/quiz", params: { setId : set.id} }}>
-                            <FontAwesome name="pencil-square-o" size={50} color="#2b70e4" />
-                        </Link>
-                    </View>
-                ))}
-            </SafeAreaView>
+                        </Pressable>
+                    ))}
+                </SafeAreaView>
+            </ScrollView>
         </SafeAreaProvider>
     );
 }
 const styles = StyleSheet.create({
-    setContainer: {
-        borderColor: "rgb(2, 20, 48)",
-        borderWidth: 2,
-        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-        borderWidth: 2,
-        borderRadius: 10,
+    cardHeaderContainer: {
+        width: "100%",
+        maxWidth: 500,
+        justtifyContent: "center",
+        alignItems: "center",
         padding: 10,
-        margin: 10,
-        flexDirection: "row",
-        gap: 42,
+    },
+    cardHeaderText: {
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+    cardHeaderUser: {
+        color: "#2b70e4",
+        fontSize: 28
+    },
+    libraryContainer: {
+        width: "100%",
+        maxWidth: 500,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 10,
+    },
+    setContainer: {
+        width: "95%",
+        maxWidth: 400,
+        padding: 10,
+        justifyContent: "center",
         alignItems: "center",
     },
     setInfo: {
         backgroundColor: "#e1e1e1ff",
-        borderColor: "rgb(2, 20, 48)",
-        borderWidth: 2,
-        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)",
+        width: "100%",
         borderRadius: 10,
-        padding: 10,
-        width: 250,
+        padding: 18,
+        flex: 1,
     },
     setHeader: {
         flexDirection: "row",
@@ -131,19 +170,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     setSubject: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: "bold",
         color: "rgb(2, 20, 48)",
     },
     setDescription: {
-        fontSize: 14,
-        color: "#4f4f4f",
+        fontSize: 16,
+        color: "rgb(2, 20, 48)",
         paddingTop: 6,
         alignSelf: "center",
     },
     setCount: {
-        fontSize: 14,
-        color: "#4f4f4f",
+        fontSize: 16,
+        color: "rgb(2, 20, 48)",
         alignSelf: "center",
         fontWeight: "bold",
     }
