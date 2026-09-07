@@ -90,96 +90,108 @@ export default function NewSet() {
                 ),
             }} />
             <SafeAreaView>
-            <ScrollView>
-                <View style={styles.setInfoContainer}>
-                    <View style={styles.setInfo}>
-                        <Text style={styles.setSubject}>Subject</Text>
-                        <Text style={styles.setSubject}>Card Count: {cardCount}</Text>
-                    </View>
-                    <TextInput
-                        value={info.subject}
-                        style={styles.inputContainer}
-                        placeholder="e.g. CS 1332"
-                        onChangeText={(userInput) => setInfo({ ...info, subject: userInput })}
-                    />
-                    <Text style={styles.setDescription}>Description</Text>
-                    <TextInput
-                        value={info.description}
-                        style={styles.inputContainer}
-                        placeholder="Description"
-                        onChangeText={(userInput) => setInfo({ ...info, description: userInput })}
-                    />
-                    <TouchableOpacity style={styles.createSetButton} onPress={createSet}>
-                        <Feather name="plus" size={18} color="white" />
-                        <Text style={styles.createSetButtonText}>Create Set</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    {cards.map((card, cardIndex) => (
-                        <View key={cardIndex} style={styles.setCardContainer}>
-                            <View style={styles.cardHeader}>
-                                <Text style={styles.cardNumber}>Card {cardIndex + 1}</Text>
-                                <TouchableOpacity onPress={() => removeCard(cardIndex)}>
-                                    <MaterialIcons name="delete" size={24} color="black" />
-                                </TouchableOpacity>
+                <ScrollView>
+                    <View style={styles.container}>
+                        <View style={styles.setInfoContainer}>
+                            <View style={styles.setInfo}>
+                                <Text style={styles.setSubject}>Subject</Text>
+                                <Text style={styles.setSubject}>Count: {cardCount}</Text>
                             </View>
                             <TextInput
-                                value={card.question}
+                                value={info.subject}
                                 style={styles.inputContainer}
-                                placeholder={`Question ${cardIndex + 1}`}
-                                onChangeText={(userInput) => updateQuestion(userInput, cardIndex)}
+                                placeholder="e.g. CS 1332"
+                                onChangeText={(userInput) => setInfo({ ...info, subject: userInput })}
                             />
-                            <View>
-                                {card.answers.map((answer, ansIndex) => (
-                                    <View key={ansIndex} style={styles.answerContainer}>
-                                        <TouchableOpacity onPress={() => isCorrect(cardIndex, ansIndex)}>
-                                            <MaterialIcons name={answer.correct ? "check-box" : "check-box-outline-blank"} size={24} color={answer.correct ? "green" : "rgb(2, 20, 48)"} />
-                                        </TouchableOpacity>
-                                        <TextInput
-                                            value={answer.text}
-                                            style={styles.answerInput}
-                                            placeholder={`Answer ${ansIndex + 1}`}
-                                            onChangeText={(userInput) => updateAnswer(userInput, cardIndex, ansIndex)}
-                                        />
-                                        <TouchableOpacity onPress={() => removeAnswer(cardIndex, ansIndex)}>
+                            <Text style={styles.setDescription}>Description</Text>
+                            <TextInput
+                                value={info.description}
+                                style={styles.inputContainer}
+                                placeholder="Description"
+                                onChangeText={(userInput) => setInfo({ ...info, description: userInput })}
+                            />
+                            <TouchableOpacity style={styles.createSetButton} onPress={createSet}>
+                                <Feather name="plus" size={18} color="white" />
+                                <Text style={styles.createSetButtonText}>Create Set</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            {cards.map((card, cardIndex) => (
+                                <View key={cardIndex} style={styles.setCardContainer}>
+                                    <View style={styles.cardHeader}>
+                                        <Text style={styles.cardNumber}>Card {cardIndex + 1}</Text>
+                                        <TouchableOpacity onPress={() => removeCard(cardIndex)}>
                                             <MaterialIcons name="delete" size={24} color="black" />
                                         </TouchableOpacity>
                                     </View>
-                                ))}
-                            </View>
-                            <TouchableOpacity style={styles.addButton} onPress={() => addAnswer(cardIndex)}>
-                                <View style={styles.addAnswerContent}>
-                                    <Feather name="plus" size={18} color="white" />
-                                    <Text style={styles.addButtonText}> Add Answer</Text>
+                                    <TextInput
+                                        value={card.question}
+                                        style={styles.inputContainer}
+                                        placeholder={`Question ${cardIndex + 1}`}
+                                        onChangeText={(userInput) => updateQuestion(userInput, cardIndex)}
+                                    />
+                                    <View>
+                                        {card.answers.map((answer, ansIndex) => (
+                                            <View key={ansIndex} style={styles.answerContainer}>
+                                                <TouchableOpacity onPress={() => isCorrect(cardIndex, ansIndex)}>
+                                                    <MaterialIcons name={answer.correct ? "check-box" : "check-box-outline-blank"} size={24} color={answer.correct ? "green" : "rgb(2, 20, 48)"} />
+                                                </TouchableOpacity>
+                                                <TextInput
+                                                    value={answer.text}
+                                                    style={styles.answerInput}
+                                                    placeholder={`Answer ${ansIndex + 1}`}
+                                                    onChangeText={(userInput) => updateAnswer(userInput, cardIndex, ansIndex)}
+                                                />
+                                                <TouchableOpacity onPress={() => removeAnswer(cardIndex, ansIndex)}>
+                                                    <MaterialIcons name="delete" size={24} color="black" />
+                                                </TouchableOpacity>
+                                            </View>
+                                        ))}
+                                    </View>
+                                    <TouchableOpacity style={styles.addButton} onPress={() => addAnswer(cardIndex)}>
+                                        <View style={styles.addAnswerContent}>
+                                            <Feather name="plus" size={18} color="white" />
+                                            <Text style={styles.addButtonText}> Add Answer</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
-                            </TouchableOpacity>
+                            ))}
                         </View>
-                    ))}
-                </View>
-                <TouchableOpacity style={styles.addButton} onPress={addCard}>
-                    <View style={styles.addAnswerContent}>
-                        <Feather name="plus" size={18} color="white" />
-                        <Text style={styles.addButtonText}> Add Card</Text>
+                        <TouchableOpacity style={styles.addButton} onPress={addCard}>
+                            <View style={styles.addAnswerContent}>
+                                <Feather name="plus" size={18} color="white" />
+                                <Text style={styles.addButtonText}> Add Card</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
-            </ScrollView>
+                </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 10,
+        paddingBottom: 50,
+    },
     setInfoContainer: {
-        borderColor: "rgb(2, 20, 48)",
+        backgroundColor: "#e1e1e1ff",
+        boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)",
+        width: "90%",
+        maxWidth: 500,
+        alignSelf: "center",
         borderRadius: 8,
-        borderWidth: 2,
-        padding: 12,
         margin: 10,
+        padding: 10,
     },
     setInfo: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginBottom: 5,
+        width: "100%",
+        maxWidth: 400,
+        alignSelf: "center",
     },
     setSubject: {
         fontSize: 18,
@@ -192,17 +204,27 @@ const styles = StyleSheet.create({
         color: "rgb(2, 20, 48)",
         fontSize: 18,
         fontWeight: "bold",
+        width: "100%",
+        maxWidth: 400,
+        alignSelf: "center",
     },
     inputContainer: {
         borderColor: "rgb(2, 20, 48)",
         borderWidth: 2,
+        borderRadius: 8,
+        width: "100%",
+        maxWidth: 400,
+        alignSelf: "center",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         padding: 10,
     },
     createSetButton: {
         backgroundColor: "#2b70e4",
+        boxShadow: "0px 2px 4px #2b70e4",
         marginTop: 10,
         borderRadius: 12,
-        width: 240,
+        width: "100%",
+        maxWidth: 240,
         alignSelf: "center",
         padding: 10,
         flexDirection: "row",
@@ -216,17 +238,22 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     setCardContainer: {
-        borderColor: "rgb(2, 20, 48)",
-        borderWidth: 2,
-        padding: 12,
-        margin: 10,
+        backgroundColor: "#e1e1e1ff",
+        boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)",
+        width: "90%",
+        maxWidth: 500,
+        alignSelf: "center",
         borderRadius: 8,
+        margin: 10,
+        padding: 14,
     },
     cardHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
+        width: "100%",
+        maxWidth: 400,
+        alignSelf: "center",
         marginBottom: 5,
-        alignItems: "center",
     },
     cardNumber: {
         fontSize: 18,
@@ -236,26 +263,34 @@ const styles = StyleSheet.create({
     answerContainer: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 6,
+        gap: 4,
         marginTop: 10,
+        width: "100%",
+        maxWidth: 400,
+        alignSelf: "center",
     },
     answerInput: {
         borderColor: "rgb(2, 20, 48)",
         borderWidth: 2,
+        borderRadius: 8,
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         padding: 10,
         width: "85%",
     },
     addButton: {
         backgroundColor: "rgb(2, 20, 48)",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         borderRadius: 12,
         padding: 10,
         marginTop: 10,
-        width: 140,
+        width: "100%",
+        maxWidth: 160,
         alignSelf: "center",
     },
     addButtonText: {
         color: "white",
         fontWeight: "bold",
+        textAlign: "center",
     },
     addAnswerContent: {
         flexDirection: "row",
