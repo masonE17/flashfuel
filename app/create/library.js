@@ -97,36 +97,41 @@ export default function Library() {
                 )
             }} />
             <ScrollView>
-                <View style={styles.cardHeaderContainer}>
-                    <Text style={styles.cardHeaderText}>Ready to learn, <Text style={styles.cardHeaderUser}>{user?.username || "User"}</Text>?</Text>
-                    <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 2, borderRadius: 5, marginTop: 7, width: "100%" }}></View>
-                </View>
                 <SafeAreaView>
-                    {sets.map((set) => (
-                        <Pressable onPress={() => navigateToQuiz(set.id)} key={set.id}>
-                            <View style={styles.libraryContainer}>
-                                <View style={styles.setContainer}>
-                                    <View style={styles.setInfo}>
-                                        <View style={styles.setHeader}>
-                                            <Text style={styles.setSubject}>{set.subject}</Text>
-                                            <Pressable onPress={() => confirmDelete(set.id)}>
-                                                <MaterialIcons name="delete" size={26} color="#2b70e4" />
-                                            </Pressable>
+                    <View style={styles.container}>
+                        <View style={styles.cardHeaderContainer}>
+                            <Text style={styles.cardHeaderText}>Ready to learn, <Text style={styles.cardHeaderUser}>{user?.username || "User"}</Text>?</Text>
+                            <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 2, borderRadius: 5, marginTop: 7, width: "100%" }}></View>
+                        </View>
+                        {sets.map((set) => (
+                            <Pressable onPress={() => navigateToQuiz(set.id)} key={set.id}>
+                                <View style={styles.libraryContainer}>
+                                    <View style={styles.setContainer}>
+                                        <View style={styles.setInfo}>
+                                            <View style={styles.setHeader}>
+                                                <Text style={styles.setSubject}>{set.subject}</Text>
+                                                <Pressable onPress={() => confirmDelete(set.id)}>
+                                                    <MaterialIcons name="delete" size={26} color="#2b70e4" />
+                                                </Pressable>
+                                            </View>
+                                            <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4 }}></View>
+                                            <Text style={styles.setDescription}>{set.description}</Text>
+                                            <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
                                         </View>
-                                        <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 2, marginTop: 4 }}></View>
-                                        <Text style={styles.setDescription}>{set.description}</Text>
-                                        <Text style={styles.setCount}>{set.cards[0].count} cards</Text>
                                     </View>
                                 </View>
-                            </View>
-                        </Pressable>
-                    ))}
+                            </Pressable>
+                        ))}
+                    </View>
                 </SafeAreaView>
             </ScrollView>
         </SafeAreaProvider>
     );
 }
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 10,
+    },
     cardHeaderContainer: {
         width: "100%",
         maxWidth: 500,
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     setContainer: {
-        width: "95%",
+        width: "100%",
         maxWidth: 400,
         padding: 10,
         justifyContent: "center",
