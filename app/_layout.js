@@ -24,6 +24,7 @@ export default function RootLayout() {
     <Tabs.Screen name="create/newSet" options={{ 
       href: null ,
       title: "New Set",
+      headerTitleStyle: { fontWeight: "bold", fontSize: 20, color: "#rgb(2, 20, 48)" },
     }} />
     <Tabs.Screen name="user/account" options={{
       headerShown: false,
@@ -40,6 +41,7 @@ export default function RootLayout() {
       <Tabs.Screen name="practice/quiz" options={{
         href: null,
         title: "Quiz",
+        headerTitleStyle: { fontWeight: "bold", fontSize: 20, color: "#rgb(2, 20, 48)" },
         tabBarStyle: { display: "none" },
       }} />
   </Tabs>

@@ -69,67 +69,73 @@ export default function Quiz() {
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerLeft: () => (
-                    <Pressable onPress={ () => router.push("create/library") } style={{ marginLeft: 10 }}>
-                        <Feather name="arrow-left" size={24} color="rgb(2, 20, 48)" />
+                    <Pressable onPress={ () => router.push("create/library") } style={{ marginLeft: 18 }}>
+                        <Feather name="arrow-left" size={28} color="#2b70e4" />
                     </Pressable>
                 )
             }}
             />
             <SafeAreaView>
                 <ScrollView ref={scrollViewRef}>
-                    <View style={styles.cardTextContainer}>
-                        <Text style={styles.cardSubject}>{sets.subject}</Text>
-                        <Text style={styles.cardDescription}>{sets.description}</Text>
-                    </View>
-                    {cards.map((card, cardIndex) => (
-                        <View key={cardIndex} style={styles.cardContainer}>
-                            <Text style={styles.question}><Text style={{ color: "#2b70e4" }}>Question {cardIndex + 1}:</Text> {card.question}</Text>
-                            <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 3, borderRadius: 2, marginBottom: 5 }}></View>
-                            <View>
-                                {card.answers.map((answer, ansIndex) => (
-                                    <View key={ansIndex} style={styles.answerContainer}>
-                                        <TouchableOpacity onPress={() => selectAnswer(cardIndex, ansIndex)}>
-                                            <MaterialIcons name={selectedAnswer[cardIndex] === ansIndex ? "check-box" : "check-box-outline-blank"} size={24} color={selectedAnswer[cardIndex] === ansIndex ? "green" : "rgb(2, 20, 48)"} />
-                                        </TouchableOpacity>
-                                        <Text style={styles.answerText}>{answer.text}</Text>
-                                    </View>
-                                ))}
-                            </View>
+                    <View style={styles.container}>
+                        <View style={styles.cardTextContainer}>
+                            <Text style={styles.cardSubject}>{sets.subject}</Text>
+                            <Text style={styles.cardDescription}>{sets.description}</Text>
+                            <View style={{ borderColor: "rgb(2, 20, 48)", borderWidth: 2, borderRadius: 5, marginTop: 7, width: "100%" }}></View>
                         </View>
-                    ))}
-                    <Pressable onPress={() => submitQuiz()} style={styles.submitButton}>
-                        <Text style={styles.submitButtonText}>Submit</Text>
-                    </Pressable>
+                        {cards.map((card, cardIndex) => (
+                            <View key={cardIndex} style={styles.cardContainer}>
+                                <Text style={styles.question}><Text style={{ color: "#2b70e4" }}>Question {cardIndex + 1}:</Text> {card.question}</Text>
+                                <View style={{ borderBottomColor: "rgb(2, 20, 48)", borderBottomWidth: 3, borderRadius: 2, marginBottom: 5 }}></View>
+                                <View>
+                                    {card.answers.map((answer, ansIndex) => (
+                                        <View key={ansIndex} style={styles.answerContainer}>
+                                            <TouchableOpacity onPress={() => selectAnswer(cardIndex, ansIndex)}>
+                                                <MaterialIcons name={selectedAnswer[cardIndex] === ansIndex ? "check-box" : "check-box-outline-blank"} size={24} color={selectedAnswer[cardIndex] === ansIndex ? "green" : "rgb(2, 20, 48)"} />
+                                            </TouchableOpacity>
+                                            <Text style={styles.answerText}>{answer.text}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                        ))}
+                        <Pressable onPress={() => submitQuiz()} style={styles.submitButton}>
+                            <Text style={styles.submitButtonText}>Submit</Text>
+                        </Pressable>
+                    </View>
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
     );
 }
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 10,
+    },
     cardTextContainer: {
-        marginLeft: 10,
-        marginRight: 10,
+        width: "100%",
+        maxWidth: 500,
         padding: 10,
         alignItems: "center",
     },
     cardSubject: {
-        fontSize: 30,
+        fontSize: 32,
         fontWeight: "bold",
         color: "rgb(2, 20, 48)",
     },
     cardDescription: {
-        fontSize: 14,
+        fontSize: 16,
         color: "rgb(2, 20, 48)",
     },
     cardContainer: {
-        borderColor: "rgb(2, 20, 48)",
-        borderWidth: 2,
-        borderRadius: 10,
-        padding: 12,
-        marginLeft: 15,
-        marginRight: 15,
-        marginBottom: 15,
+        backgroundColor: "#e1e1e1ff",
+        boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)",
+        width: "90%",
+        maxWidth: 500,
+        alignSelf: "center",
         borderRadius: 8,
+        margin: 10,
+        padding: 10,
     },
     question: {
         fontSize: 18,
@@ -149,10 +155,13 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         backgroundColor: "#2b70e4",
-        width: 240,
+        boxShadow: "0px 2px 4px #2b70e4",
+        width: "100%",
+        maxWidth: 240,
         padding: 10,
         borderRadius: 12,
-        marginBottom: 70,
+        marginTop: 15,
+        marginBottom: 80,
         alignSelf: "center",
     },
     submitButtonText: {
