@@ -84,8 +84,8 @@ export default function NewSet() {
         <SafeAreaProvider>
             <Stack.Screen options={{
                 headerLeft: () => (
-                    <Pressable onPress={ () => router.push("create/library") } style={{ marginLeft: 10 }}>
-                        <Feather name="arrow-left" size={24} color="rgb(2, 20, 48)" />
+                    <Pressable onPress={ () => router.push("create/library") } style={{ marginLeft: 18 }}>
+                        <Feather name="arrow-left" size={28} color="#2b70e4" />
                     </Pressable>
                 ),
             }} />
