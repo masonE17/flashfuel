@@ -1,6 +1,6 @@
 # FlashFuel
 - Fuel your mind, flash your knowledge. 
-- FlashFuel is a mobile flashcard app built with React Native and Expo. Create custom study sets, quiz yourself with multiple-choice questions, and track your progress — all backed by Supabase.
+- FlashFuel is a mobile flashcard app built with React Native and Expo. Create custom study sets, quiz yourself with multiple-choice questions, and track your progress, which is all backed by Supabase.
 
 ## Features
 - **Auth** — sign up or log in with email/password
